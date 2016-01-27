@@ -34,7 +34,10 @@ import hudson.remoting.Launcher;
 import hudson.slaves.OfflineCause;
 import java.io.IOException;
 import java.util.logging.Logger;
+
+import jenkins.security.Roles;
 import net.sf.json.JSONObject;
+import org.jenkinsci.remoting.RoleChecker;
 import org.kohsuke.stapler.StaplerRequest;
 
 public class VersionMonitor extends NodeMonitor {
@@ -83,6 +86,11 @@ public class VersionMonitor extends NodeMonitor {
                 // Older slave.jar won't have VERSION
                 return "< 1.335";
             }
+        }
+
+        @Override
+        public void checkRoles(RoleChecker roleChecker) throws SecurityException {
+            roleChecker.check(this, Roles.SLAVE);
         }
     }
     
